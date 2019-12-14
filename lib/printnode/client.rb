@@ -3,6 +3,7 @@ require 'uri'
 require 'json'
 require 'ostruct'
 require 'cgi'
+require 'erb'
 
 module PrintNode
   # Handles all requests and API access.
@@ -377,6 +378,24 @@ module PrintNode
                       '/scales/'
       response_object = JSON.parse(get(end_point_url).body)
       parse_array_to_struct(response_object)
+    end
+
+    # Sends a GET request to /computer/(computer_id)/scale/(scale_nam)/(device_num)
+    #
+    # @param computer_id [String] id of computer to be got.
+    # @param scale_name [String] identifies a make and model of scale. By default this is of the form "manufacturer - model"
+    # @param device_num [String] usually 0, deviceNum is id of specific scale
+    #
+    # == Returns:
+    # An OpenStruct object. The design of this Object will be the same as the ones on the PrintNode API docs.
+    # @see https://www.printnode.com/docs/api/curl/#scales Scales on API Docs
+    def scale(computer_id, scale_name, device_num)
+      end_point_url = '/computer/' +
+        escape_with_types(computer_id) +
+        '/scale/' + ERB::Util.url_encode(scale_name) +
+        '/' + escape_with_types(device_num)
+      response_object = JSON.parse(get(end_point_url).body)
+      parse_hash_to_struct(response_object)
     end
 
     # Sends a GET request to /printers/(set_a), or:
