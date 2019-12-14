@@ -389,7 +389,7 @@ module PrintNode
     # == Returns:
     # An OpenStruct object. The design of this Object will be the same as the ones on the PrintNode API docs.
     # @see https://www.printnode.com/docs/api/curl/#scales Scales on API Docs
-    def scale(computer_id, scale_name, device_num)
+    def scale(computer_id:, scale_name:, device_num: 0)
       end_point_url = '/computer/' +
         escape_with_types(computer_id) +
         '/scale/' + ERB::Util.url_encode(scale_name) +
